@@ -11,9 +11,7 @@ export default function SimpleModal({ open, onClose, title, children }) {
               <Dialog.Title>{title}</Dialog.Title>
             </Dialog.Header>
 
-            <Dialog.Body>
-              {children}
-            </Dialog.Body>
+            <Dialog.Body>{children}</Dialog.Body>
 
             <Dialog.Footer>
               <Button onClick={onClose} variant="outline">

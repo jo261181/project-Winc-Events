@@ -7,16 +7,34 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
+
 import { useState, useEffect } from "react";
+
 import SimpleModal from "../components/ui/modal";
+
 
 export const EventsPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // ⭐ Modal state moet HIER staan
   const [modalOpen, setModalOpen] = useState(false);
+
+  // ⭐ addEvent staat nu op de juiste plek
+  async function addEvent(newEvent) {
+    await fetch("http://localhost:3000/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newEvent),
+    });
+
+    // voeg toe aan state
+    setData((prev) => ({
+      ...prev,
+      events: [...prev.events, newEvent],
+    }));
+
+    setModalOpen(false);
+  }
 
   useEffect(() => {
     fetch("events.json")
@@ -57,6 +75,69 @@ export const EventsPage = () => {
       {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
         <Heading mb={4}>List of events</Heading>
+
+        <Button mb={4} onClick={() => setModalOpen(true)}>
+          Nieuw evenement toevoegen
+        </Button>
+
+        <SimpleModal
+  open={modalOpen}
+  onClose={() => setModalOpen(false)}
+  title="Nieuw evenement"
+>
+  <Box
+    as="form"
+    onSubmit={(e) => {
+      e.preventDefault();
+
+      const form = new FormData(e.target);
+
+      const newEvent = {
+        title: form.get("title"),
+        description: form.get("description"),
+        image: form.get("image"),
+        location: form.get("location"),
+        startTime: form.get("startTime"),
+        endTime: form.get("endTime"),
+        categoryIds: form.getAll("categoryIds").map(Number),
+      };
+
+      addEvent(newEvent);
+    }}
+  >
+    <label>Titel</label>
+    <input name="title" required />
+
+    <label>Beschrijving</label>
+    <input name="description" required />
+
+    <label>Locatie</label>
+    <input name="location" required />
+
+    <label>Afbeelding URL</label>
+    <input name="image" required />
+
+    <label>Starttijd</label>
+    <input type="datetime-local" name="startTime" required />
+
+    <label>Eindtijd</label>
+    <input type="datetime-local" name="endTime" required />
+
+    <label>Categorieën</label>
+    <Box display="flex" flexDir="column" gap={1}>
+      {categories.map((cat) => (
+        <label key={cat.id}>
+          <input type="checkbox" name="categoryIds" value={cat.id} />
+          {cat.name}
+        </label>
+      ))}
+    </Box>
+
+    <Button type="submit" mt={4}>
+      Opslaan
+    </Button>
+  </Box>
+</SimpleModal>
 
         <ul style={{ listStyle: "none", padding: 0 }}>
           {eventsArray.map((evt) => (
@@ -99,7 +180,11 @@ export const EventsPage = () => {
                   <HStack mt={4}>
                     {evt.categoryIds?.map((id) => {
                       const category = categories.find((c) => c.id === id);
-                      return <Badge key={id} colorPalette = "orange">{category?.name}</Badge>;
+                      return (
+                        <Badge key={id} colorPalette="orange">
+                          {category?.name}
+                        </Badge>
+                      );
                     })}
                   </HStack>
                 </Card.Description>
