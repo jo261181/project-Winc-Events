@@ -1,10 +1,10 @@
-import { Dialog, Button, Portal } from "@chakra-ui/react";
+import { Dialog, Portal, Button } from "@chakra-ui/react";
 
 export default function SimpleModal({ open, onClose, title, children }) {
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
       <Portal>
-        <Dialog.Backdrop />
+        <Dialog.Backdrop bg="blackAlpha.600" backdropFilter="blur(6px)" />
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
