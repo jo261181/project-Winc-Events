@@ -199,6 +199,6 @@ export const EventsPage = () => {
       </Box>
     </>
   );
-};
+}
 
 export default EventsPage;
