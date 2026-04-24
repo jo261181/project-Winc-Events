@@ -5,21 +5,20 @@ import {
   Badge,
   Button,
   Box,
-  CardRoot,
-  CardBody,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-  Text
+  Text,
+  Card,
+  SimpleGrid,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
 
-export default function EventsPage() {
+export const EventsPage = () => {
   const [data, setData] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   async function addEvent(newEvent) {
     await fetch("http://localhost:3000/events", {
@@ -74,67 +73,67 @@ export default function EventsPage() {
           <EventForm categories={categories} addEvent={addEvent} />
         </SimpleModal>
 
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <SimpleGrid columns={2} gap="20px">
           {eventsArray.map((evt) => (
-            <li key={evt.id} style={{ marginBottom: "20px" }}>
-              <CardRoot
-                maxW="400px"
-                w="100%"
-                p={4}
-                borderRadius="xl"
-                shadow="md"
-                bg="white"
-              >
-                <CardBody>
-                  <Image
-                    src={evt.image}
-                    alt={evt.title}
-                    objectFit="cover"
-                    boxSize="200px"
-                    borderRadius="md"
-                    mb={2}
-                  />
+            <Card.Root
+              key={evt.id}
+              maxW="330px"
+              w="100%"
+              borderRadius="lg"
+              shadow="lg"
+              bg="white"
+              alignItems="center"
+            >
+              <Card.Header>
+                <Image
+                  src={evt.image}
+                  alt={evt.title}
+                  objectFit="cover"
+                  boxSize="250px"
+                  borderRadius="md"
+                  mb={1}
+                />
 
-                  <CardTitle>{evt.title}</CardTitle>
+                <Card.Title>{evt.title}</Card.Title>
+                <Card.Description>{evt.description}</Card.Description>
+              </Card.Header>
 
-                  <Text fontSize="sm" color="gray.600" mt={1}>
-                    {evt.description}
-                  </Text>
+              <Card.Body>
+                <Text mt={1}>{evt.location}</Text>
 
-                  <Text mt={1}>{evt.location}</Text>
+                <Text mt={1}>
+                  {new Date(evt.startTime).toLocaleString("nl-NL", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                  {" – "}
+                  {new Date(evt.endTime).toLocaleString("nl-NL", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                </Text>
 
-                  <Text mt={1}>
-                    {new Date(evt.startTime).toLocaleString("nl-NL", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
-                    {" – "}
-                    {new Date(evt.endTime).toLocaleString("nl-NL", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
-                  </Text>
+                <HStack mt={4}>
+                  {evt.categoryIds?.map((id) => {
+                    const category = categories.find((c) => c.id === id);
+                    return (
+                      <Badge key={id} colorPalette="orange">
+                        {category?.name}
+                      </Badge>
+                    );
+                  })}
+                </HStack>
+              </Card.Body>
 
-                  <HStack mt={4}>
-                    {evt.categoryIds?.map((id) => {
-                      const category = categories.find((c) => c.id === id);
-                      return (
-                        <Badge key={id} colorPalette="orange">
-                          {category?.name}
-                        </Badge>
-                      );
-                    })}
-                  </HStack>
-                </CardBody>
-
-                <CardFooter>
-                  <Button>Buy Latte</Button>
-                </CardFooter>
-              </CardRoot>
-            </li>
+              <Card.Footer gap={3}>
+                <Button onClick={() => navigate(`/event/${evt.id}`)}>
+                  View details
+                </Button>
+              </Card.Footer>
+            </Card.Root>
           ))}
-        </ul>
+        </SimpleGrid>
       </Box>
     </>
   );
-}
+};

@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { EventPage } from './pages/EventPage';
-import EventsPage from "./pages/EventsPage.jsx";
-
+import { EventsPage } from './pages/EventsPage';
 import { Provider } from './components/ui/provider';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './components/Root';
