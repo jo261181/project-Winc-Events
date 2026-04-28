@@ -15,6 +15,34 @@ import { useNavigate } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
 
+ const [searchTerm, setSearchTerm] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const filteredEvents = data.hits.filter((hit) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      hit.event.id.toLowerCase().includes(search) ||
+      hit.event.description.toLowerCase().includes(search) ||
+      hit.event.categories.some((category) =>
+        category.toLowerCase().includes(search)
+      )
+    );
+  });
+
+  if (selectedEvent) {
+    return (
+      <EventPage
+
+        id={selectedEvent.event.id}
+        setSearchTerm={(term) => {
+          setSearchTerm(term);
+          setSelectedEvent(null);
+        }}
+      />
+    );
+  }
+
 export const EventsPage = () => {
   const [data, setData] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -74,7 +102,7 @@ export const EventsPage = () => {
         </SimpleModal>
 
         <SimpleGrid
-          columns={2}
+          
           gap="30px"
           columns={{ base: 1, sm: 2, lg: 3 }}
           spacing={6}
