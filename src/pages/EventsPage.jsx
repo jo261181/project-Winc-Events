@@ -1,5 +1,5 @@
 import {
-  Heading,
+  // Heading,
   Image,
   HStack,
   Badge,
@@ -9,6 +9,7 @@ import {
   Card,
   SimpleGrid,
 } from "@chakra-ui/react";
+import Heading from "../components/ui/Heading";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";

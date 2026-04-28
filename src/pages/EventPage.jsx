@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Box,
-  Heading,
+  // Heading,
   Text,
   Badge,
   Button,
@@ -10,6 +10,7 @@ import {
   HStack,
   Card,
 } from "@chakra-ui/react";
+import HeadingExample from "../components/ui/Heading";
 
 export const EventPage = () => {
   const { id } = useParams();
@@ -42,7 +43,9 @@ export const EventPage = () => {
   }
 
   return (
-    <><Box p={6}
+    <>
+    <HeadingExample />
+    <Box p={6}
 
       position="fixed"
       inset="0"
@@ -105,6 +108,8 @@ export const EventPage = () => {
 
           </Card.Footer>
         </Card.Root>
-      </Box></>
+      </Box>
+    </>
+
   );
 };
