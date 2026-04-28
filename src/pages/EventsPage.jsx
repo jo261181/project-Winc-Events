@@ -23,39 +23,35 @@ export const EventsPage = () => {
 
   const navigate = useNavigate();
 
-  const filteredEvents = data
-    ? data.events.filter((evt) => {
-        const search = searchTerm.toLowerCase();
-        return (
-          evt.id.toLowerCase().includes(search) ||
-          evt.description.toLowerCase().includes(search) ||
-          evt.categoryIds?.some((id) => {
-            const category = data.categories.find((c) => c.id === id);
-            return category?.name.toLowerCase().includes(search);
-          })
-        );
-      })
-    : [];
+  // Fetch events.json
+  useEffect(() => {
+    fetch("events.json")
+      .then((res) => res.json())
+      .then((json) => setData(json));
+  }, []);
 
-  if (selectedEvent) {
+  if (!data) return <p>Loading…</p>;
+
+  const eventsArray = data.events || [];
+  const categories = data.categories || [];
+
+  // Filtering
+  const filteredEvents = eventsArray.filter((evt) => {
+    const search = searchTerm.toLowerCase();
+
+    const categoryMatch = evt.categoryIds?.some((id) => {
+      const category = categories.find((c) => c.id === id);
+      return category?.name.toLowerCase().includes(search);
+    });
+
     return (
-      <EventPage
-        id={selectedEvent.id}
-        setSearchTerm={(term) => {
-          setSearchTerm(term);
-          setSelectedEvent(null);
-        }}
-      />
+      evt.id.toString().toLowerCase().includes(search) ||
+      evt.description?.toLowerCase().includes(search) ||
+      categoryMatch
     );
-  }
+  });
 
-
-
-export const EventsPage = () => {
-  const [data, setData] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const navigate = useNavigate();
-
+  // Add event
   async function addEvent(newEvent) {
     await fetch("http://localhost:3000/events", {
       method: "POST",
@@ -71,19 +67,9 @@ export const EventsPage = () => {
     setModalOpen(false);
   }
 
-  useEffect(() => {
-    fetch("events.json")
-      .then((res) => res.json())
-      .then((json) => setData(json));
-  }, []);
-
-  if (!data) return <p>Loading…</p>;
-
-  const eventsArray = data.events || [];
-  const categories = data.categories || [];
-
   return (
     <>
+      {/* Background */}
       <Box
         position="fixed"
         inset="0"
@@ -94,6 +80,7 @@ export const EventsPage = () => {
         zIndex="-1"
       />
 
+      {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
         <Heading mb={4}>List of events</Heading>
 
@@ -101,6 +88,7 @@ export const EventsPage = () => {
           Create new event
         </Button>
 
+        {/* Modal */}
         <SimpleModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
@@ -109,17 +97,15 @@ export const EventsPage = () => {
           <EventForm categories={categories} addEvent={addEvent} />
         </SimpleModal>
 
+        {/* Grid */}
         <SimpleGrid
-          
-          gap="30px"
-          columns={{ base: 1, sm: 2, lg: 3 }}
+          columns={[1, 2, null, 3]} // array syntax
           spacing={6}
-          
+          gap="30px"
         >
-          {eventsArray.map((evt) => (
+          {filteredEvents.map((evt) => (
             <Card.Root
               key={evt.id}
-              // maxW="lg"
               w="100%"
               borderRadius="lg"
               shadow="lg"
@@ -133,22 +119,16 @@ export const EventsPage = () => {
                   alt={evt.title}
                   objectFit="cover"
                   boxSize="250px"
-                  boxwidth="100%"
+                  width="100%"
                   borderRadius="md"
                   mb={3}
-                  
                 />
 
                 <Card.Title>{evt.title}</Card.Title>
-                <Card.Description>{evt.description} </Card.Description>
+                <Card.Description>{evt.description}</Card.Description>
               </Card.Header>
 
               <Card.Body>
-                <Box
-                  alignItems="center"
-                  flexDirection={{ base: "column", sm: "row" }}
-                  
-                ></Box>
                 <Text mt={1}>{evt.location}</Text>
 
                 <Text mt={1}>
@@ -187,4 +167,3 @@ export const EventsPage = () => {
     </>
   );
 };
-}
