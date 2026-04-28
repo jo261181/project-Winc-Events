@@ -73,16 +73,23 @@ export const EventsPage = () => {
           <EventForm categories={categories} addEvent={addEvent} />
         </SimpleModal>
 
-        <SimpleGrid columns={2} gap="20px">
+        <SimpleGrid
+          columns={2}
+          gap="30px"
+          columns={{ base: 1, sm: 2, lg: 3 }}
+          spacing={6}
+          
+        >
           {eventsArray.map((evt) => (
             <Card.Root
               key={evt.id}
-              maxW="330px"
+              // maxW="lg"
               w="100%"
               borderRadius="lg"
               shadow="lg"
               bg="white"
               alignItems="center"
+              mb={5}
             >
               <Card.Header>
                 <Image
@@ -90,15 +97,22 @@ export const EventsPage = () => {
                   alt={evt.title}
                   objectFit="cover"
                   boxSize="250px"
+                  boxwidth="100%"
                   borderRadius="md"
-                  mb={1}
+                  mb={3}
+                  
                 />
 
                 <Card.Title>{evt.title}</Card.Title>
-                <Card.Description>{evt.description}</Card.Description>
+                <Card.Description>{evt.description} </Card.Description>
               </Card.Header>
 
               <Card.Body>
+                <Box
+                  alignItems="center"
+                  flexDirection={{ base: "column", sm: "row" }}
+                  
+                ></Box>
                 <Text mt={1}>{evt.location}</Text>
 
                 <Text mt={1}>
