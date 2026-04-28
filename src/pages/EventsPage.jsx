@@ -78,6 +78,7 @@ export const EventsPage = () => {
         bgPosition="center"
         opacity="0.4"
         zIndex="-1"
+        
       />
 
       {/* Content */}
@@ -122,6 +123,9 @@ export const EventsPage = () => {
                   width="100%"
                   borderRadius="md"
                   mb={3}
+                  objectFit="cover"
+                  maxH="300px"
+                  mb={4} 
                 />
 
                 <Card.Title>{evt.title}</Card.Title>
