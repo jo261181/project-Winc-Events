@@ -1,11 +1,7 @@
 import {
   Button,
-  CardRoot,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardBody,
-  CardFooter,
+  Card,
+  
   Field,
   Input,
   Stack,
@@ -14,13 +10,13 @@ import {
 
 export default function EventForm({ cancel }) {
   return (
-    <CardRoot maxW="sm">
-      <CardHeader>
-        <CardTitle>Create Event</CardTitle>
-        <CardDescription>
+    <Card.Root maxW="sm">
+      <Card.Header>
+        <Card.Title>Create Event</Card.Title>
+        <Card.Description>
           Fill in the form below to create an event
-        </CardDescription>
-      </CardHeader>
+        </Card.Description>
+      </Card.Header>
 
       <CardBody>
         <Stack gap="4" w="full">
@@ -50,14 +46,14 @@ export default function EventForm({ cancel }) {
         </Stack>
       </CardBody>
 
-      <CardFooter justifyContent="flex-end" gap={3}>
+      <Card.Footer justifyContent="flex-end" gap={3}>
        
 
         <Button variant="solid" type="submit" colorScheme="blue" width="full">
           Create Event
         </Button>
-      </CardFooter>
-    </CardRoot>
+      </Card.Footer>
+    </Card.Root>
   );
 }
 
