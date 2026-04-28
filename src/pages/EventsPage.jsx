@@ -15,26 +15,32 @@ import { useNavigate } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
 
- const [searchTerm, setSearchTerm] = useState("");
+export const EventsPage = () => {
+  const [data, setData] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  const filteredEvents = data.hits.filter((hit) => {
-    const search = searchTerm.toLowerCase();
+  const navigate = useNavigate();
 
-    return (
-      hit.event.id.toLowerCase().includes(search) ||
-      hit.event.description.toLowerCase().includes(search) ||
-      hit.event.categories.some((category) =>
-        category.toLowerCase().includes(search)
-      )
-    );
-  });
+  const filteredEvents = data
+    ? data.events.filter((evt) => {
+        const search = searchTerm.toLowerCase();
+        return (
+          evt.id.toLowerCase().includes(search) ||
+          evt.description.toLowerCase().includes(search) ||
+          evt.categoryIds?.some((id) => {
+            const category = data.categories.find((c) => c.id === id);
+            return category?.name.toLowerCase().includes(search);
+          })
+        );
+      })
+    : [];
 
   if (selectedEvent) {
     return (
       <EventPage
-
-        id={selectedEvent.event.id}
+        id={selectedEvent.id}
         setSearchTerm={(term) => {
           setSearchTerm(term);
           setSelectedEvent(null);
@@ -42,6 +48,8 @@ import EventForm from "../components/ui/EventForm";
       />
     );
   }
+
+
 
 export const EventsPage = () => {
   const [data, setData] = useState(null);
@@ -179,3 +187,4 @@ export const EventsPage = () => {
     </>
   );
 };
+}
