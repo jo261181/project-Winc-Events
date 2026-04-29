@@ -40,7 +40,7 @@ export const EventPage = () => {
   if (!event) {
     return (
       <Box p={6}>
-        <HeadingExample />
+        
         <Text>Event not found</Text>
         <Button mt={4} onClick={() => navigate(-1)}>
           Go back
@@ -73,7 +73,7 @@ export const EventPage = () => {
 
   return (
     <>
-      <HeadingExample />
+      
 
       {/* Achtergrond */}
       <Box
@@ -105,10 +105,10 @@ export const EventPage = () => {
               {event.title}
             </Card.Title>
 
-            <Card.Description>
-              <Text fontSize="lg" mb={3}>
+            <Card.Description fontSize="lg" mb={3}>
+             
                 {event.description}
-              </Text>
+              
             </Card.Description>
 
             <Text fontWeight="bold" mt={2}>

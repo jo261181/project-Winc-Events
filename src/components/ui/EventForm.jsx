@@ -9,8 +9,8 @@ import {
 
 export default function EventForm({ cancel, initialEvent, onSubmit }) {
 
-  function handleSubmit(ev) {
-    ev.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
     const formData = new FormData(e.target);
     const values = Object.fromEntries(formData.entries());
