@@ -18,7 +18,7 @@ export default function EventForm({ cancel }) {
         </Card.Description>
       </Card.Header>
 
-      <CardBody>
+      <Card.Body>
         <Stack gap="4" w="full">
           <Field.Root>
             <Field.Label>Event Name</Field.Label>
@@ -44,7 +44,7 @@ export default function EventForm({ cancel }) {
             <Input type="datetime-local" name="endTime" required />
           </Field.Root>
         </Stack>
-      </CardBody>
+      </Card.Body>
 
       <Card.Footer justifyContent="flex-end" gap={3}>
        

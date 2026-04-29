@@ -84,20 +84,20 @@ export const EventsPage = () => {
 
       {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
-        <Heading mb={4}>List of events</Heading>
+        {/* <Heading mb={4}>List of events</Heading>
 
         <Button mb={4} onClick={() => setModalOpen(true)}>
-          Create new event
+          test
         </Button>
 
         {/* Modal */}
-        <SimpleModal
+        {/* <SimpleModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
           title="Create new event"
         >
           <EventForm categories={categories} addEvent={addEvent} />
-        </SimpleModal>
+        </SimpleModal> */} 
 
         {/* Grid */}
         <SimpleGrid
