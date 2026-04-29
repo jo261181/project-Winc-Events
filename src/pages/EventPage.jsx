@@ -44,7 +44,7 @@ export const EventPage = () => {
 
   return (
     <>
-    <HeadingExample />
+    
     <Box p={6}
 
       position="fixed"

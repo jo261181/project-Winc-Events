@@ -123,6 +123,7 @@ export const EventsPage = () => {
                   boxSize="250px"
                   width="100%"
                   borderRadius="md"
+                  
                   mb={3}
                   objectFit="cover"
                   maxH="300px"

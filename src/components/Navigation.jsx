@@ -12,18 +12,19 @@ export const Navigation = ({ categories, addEvent }) => {
     <>
       <HeadingExample>
         <Flex gap={8} align="center">
-          <Heading>
+          <Heading >
             <Flex align="center">
               <Image
                 src="/images/logo.png"
                 alt="Winc Events"
                 height={{ base: "190px", sm: "200px", md: "220px", lg: "250px" }}   // responsive
-                ml={2} // margin-left
+                ml={2} 
                 objectFit="contain"
                 mt={6}
               />
             </Flex>
           </Heading>
+          
 
           <Button mb={1} onClick={() => setModalOpen(true)}>
             Create new event
