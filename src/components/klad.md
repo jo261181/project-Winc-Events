@@ -1,116 +1,58 @@
 
-  {/* <Box
-    as="form"
-    onSubmit={(e) => {
-      e.preventDefault();
+  return (
+<Box
+  position="sticky"
+  top="0"
+  width="100%"
+  backgroundColor="gray.100"
+  zIndex="sticky"
+  boxShadow="sm"
+  p={2}
+>
 
-      const form = new FormData(e.target);
-
-      const newEvent = {
-        title: form.get("title"),
-        description: form.get("description"),
-        image: form.get("image"),
-        location: form.get("location"),
-        startTime: form.get("startTime"),
-        endTime: form.get("endTime"),
-        categoryIds: form.getAll("categoryIds").map(Number),
-      };
-
-      addEvent(newEvent);
-    }}
+  {/* HELE HEADER SMALLER MAKEN */}
+  <Flex
+    maxW="650px"          // ⬅️ VEEL SMALLER
+    mx="auto"
+    width="100%"
+    align="flex-start"
+    justify="space-between"
+    gap={4}
+    direction={{ base: "column", md: "row" }}
   >
-    <label>Titel</label>
-    <input name="title" required />
 
-    <label>Beschrijving</label>
-    <input name="description" required />
+    {/* LINKERKOLOM: LOGO + ZOEKBALK */}
+    <Flex direction="column" flex="1" align="flex-start">
+      <Image
+        src="/images/logo.png"
+        alt="Winc Events"
+        height={{ base: "120px", sm: "160px", md: "200px", lg: "240px" }}  // ⬅️ VEEL GROTER
+        objectFit="contain"
+      />
 
-    <label>Locatie</label>
-    <input name="location" required />
+      <Input
+        mt={1}                     // ⬅️ minimale ruimte
+        width="100%"               // ⬅️ strak onder logo
+        bg="white"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+    </Flex>
 
-    <label>Afbeelding URL</label>
-    <input name="image" required />
+    {/* RECHTERKOLOM: KNOP */}
+    <Flex
+      align={{ base: "stretch", md: "flex-start" }}
+      justify="flex-start"
+    >
+      <Button
+        width={{ base: "100%", md: "auto" }}
+        onClick={onCreate}
+      >
+        Create new event
+      </Button>
+    </Flex>
 
-    <label>Starttijd</label>
-    <input type="datetime-local" name="startTime" required />
+  </Flex>
 
-    <label>Eindtijd</label>
-    <input type="datetime-local" name="endTime" required />
-
-    <label>Categorieën</label>
-    <Box display="flex" flexDir="column" gap={1}>
-      {categories.map((cat) => (
-        <label key={cat.id}>
-          <input type="checkbox" name="categoryIds" value={cat.id} />
-          {cat.name}
-        </label>
-      ))}
-    </Box>
-
-    <Button type="submit" mt={4}>
-      Opslaan
-    </Button>
-  </Box>
-</SimpleModal>
-
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {eventsArray.map((evt) => (
-            <li key={evt.id} style={{ marginBottom: "20px" }}>
-              <Card.Root
-                maxW="400px"
-                w="100%"
-                p={4}
-                borderRadius="xl"
-                shadow="md"
-                bg="white"
-              >
-                <Image
-                  src={evt.image}
-                  alt={evt.title}
-                  objectFit="cover"
-                  boxSize="200px"
-                  borderRadius="md"
-                  mb={2}
-                />
-
-                <p>
-                  <strong>{evt.title}</strong>
-                </p>
-
-                <Card.Description>
-                  <p>{evt.location}</p>
-                  <p>{evt.description}</p>
-
-                  {new Date(evt.startTime).toLocaleString("nl-NL", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
-                  {" – "}
-                  {new Date(evt.endTime).toLocaleString("nl-NL", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
-
-                  <HStack mt={4}>
-                    {evt.categoryIds?.map((id) => {
-                      const category = categories.find((c) => c.id === id);
-                      return (
-                        <Badge key={id} colorPalette="orange">
-                          {category?.name}
-                        </Badge>
-                      );
-                    })}
-                  </HStack>
-                </Card.Description>
-
-                <Card.Footer mt={4}>
-                  <Button>Buy Latte</Button>
-                </Card.Footer>
-              </Card.Root>
-            </li>
-          ))}
-        </ul>
-      </Box>
-    </>
-  );
-}
+</Box>

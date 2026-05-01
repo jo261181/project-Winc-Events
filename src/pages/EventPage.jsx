@@ -40,7 +40,6 @@ export const EventPage = () => {
   if (!event) {
     return (
       <Box p={6}>
-        
         <Text>Event not found</Text>
         <Button mt={4} onClick={() => navigate(-1)}>
           Go back
@@ -73,8 +72,6 @@ export const EventPage = () => {
 
   return (
     <>
-      
-
       {/* Achtergrond */}
       <Box
         p={6}
@@ -93,11 +90,12 @@ export const EventPage = () => {
           <Image
             src={event.image}
             alt={event.title}
-            objectFit="cover"
-            width="100%"
             maxH="300px"
             borderRadius="md"
             mb={4}
+            h={{ base: "200px", md: "300px", lg: "400px" }}
+            w="100%"
+            objectFit="cover"
           />
 
           <Card.Body gap="2">
@@ -106,9 +104,7 @@ export const EventPage = () => {
             </Card.Title>
 
             <Card.Description fontSize="lg" mb={3}>
-             
-                {event.description}
-              
+              {event.description}
             </Card.Description>
 
             <Text fontWeight="bold" mt={2}>

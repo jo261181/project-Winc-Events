@@ -1,5 +1,4 @@
 import {
-  // Heading,
   Image,
   HStack,
   Badge,
@@ -9,8 +8,8 @@ import {
   Card,
   SimpleGrid,
 } from "@chakra-ui/react";
-import Heading from "../components/ui/Heading";
 
+import HeadingExample from "../components/ui/Heading";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
@@ -18,13 +17,11 @@ import EventForm from "../components/ui/EventForm";
 
 export const EventsPage = () => {
   const [data, setData] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);   // ← JUIST HIER
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const navigate = useNavigate();
 
-  // Fetch events.json
   useEffect(() => {
     fetch("events.json")
       .then((res) => res.json())
@@ -36,7 +33,6 @@ export const EventsPage = () => {
   const eventsArray = data.events || [];
   const categories = data.categories || [];
 
-  // Filtering
   const filteredEvents = eventsArray.filter((evt) => {
     const search = searchTerm.toLowerCase();
 
@@ -46,31 +42,34 @@ export const EventsPage = () => {
     });
 
     return (
-      evt.id.toString().toLowerCase().includes(search) ||
-      evt.description?.toLowerCase().includes(search) ||
+      evt.title.toLowerCase().includes(search) ||
+      evt.description.toLowerCase().includes(search) ||
+      evt.location.toLowerCase().includes(search) ||
       categoryMatch
     );
   });
 
-  // Add event
-  async function addEvent(newEvent) {
-    await fetch("http://localhost:3000/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newEvent),
-    });
-
-    setData((prev) => ({
-      ...prev,
-      events: [...prev.events, newEvent],
-    }));
-
-    setModalOpen(false);
-  }
-
   return (
     <>
-      {/* Background */}
+      {/* HEADER MET ZOEK + CREATE */}
+      <HeadingExample
+        data={data}
+        onCreate={() => setCreateOpen(true)}   // ← BELANGRIJK
+      />
+
+      {/* MODAL */}
+      <SimpleModal
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        title="Create new event"
+      >
+        <EventForm
+          onSubmit={() => setCreateOpen(false)}
+          cancel={() => setCreateOpen(false)}
+        />
+      </SimpleModal>
+
+      {/* Achtergrond */}
       <Box
         position="fixed"
         inset="0"
@@ -79,43 +78,54 @@ export const EventsPage = () => {
         bgPosition="center"
         opacity="0.4"
         zIndex="-1"
-        
       />
 
       {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
-
-        <SimpleGrid
-          columns={[1, 2, null, 3]} // array syntax
-          spacing={6}
-          gap="30px"
-        >
+        <SimpleGrid columns={[1, 2, null, 3]} spacing={6} gap="30px">
           {filteredEvents.map((evt) => (
             <Card.Root
               key={evt.id}
               w="100%"
               borderRadius="lg"
-              shadow="lg"
               bg="white"
               alignItems="center"
               mb={5}
+              cursor="pointer"
+              onClick={() => navigate(`/event/${evt.id}`)}
+              boxShadow="md"
+              _dark={{
+                bg: "gray.800",
+                boxShadow: "0 0 0 1px rgba(255,255,255,0.06)",
+              }}
+              _hover={{
+                transform: "scale(1.03)",
+                boxShadow: "lg",
+                _dark: {
+                  boxShadow: "0 0 0 1px",
+                  color: "white",
+                },
+              }}
+              transition="0.2s"
             >
-              <Card.Header>
+              <Card.Header p={6} w="100%">
                 <Image
                   src={evt.image}
                   alt={evt.title}
+                  w="100%"
+                  h={{ base: "200px", md: "300px", lg: "400px" }}
                   objectFit="cover"
-                  boxSize="250px"
-                  width="100%"
                   borderRadius="md"
-                  
-                  mb={3}
-                  objectFit="cover"
-                  maxH="300px"
-                  mb={4} 
+                  mb={4}
                 />
 
-                <Card.Title>{evt.title}</Card.Title>
+                <Card.Title
+                  fontSize={{ base: "md", md: "lg", lg: "2xl" }}
+                  fontWeight="semibold"
+                >
+                  {evt.title}
+                </Card.Title>
+
                 <Card.Description>{evt.description}</Card.Description>
               </Card.Header>
 
