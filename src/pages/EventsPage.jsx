@@ -84,7 +84,7 @@ export const EventsPage = () => {
 
       {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
-        <SimpleGrid columns={[1, 2, 3, 4]} spacing={6} gap="30px">
+        <SimpleGrid columns={[1, 2, 3, 4, 4]} spacing={6} gap="30px">
           {filteredEvents.map((evt) => (
             <Card.Root
               key={evt.id}
@@ -115,7 +115,7 @@ export const EventsPage = () => {
                   src={evt.image}
                   alt={evt.title}
                   w="100%"
-                  h={{ base: "50px", md: "100px", lg: "150px" }}
+                  h={{ base: "120px", md: "130px", lg: "170px" }}
                   objectFit="cover"
                   borderRadius="md"
                   mb={4}
