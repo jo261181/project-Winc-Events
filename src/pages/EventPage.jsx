@@ -22,22 +22,27 @@ export default function EventPage() {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   // -----------------------------
-  // FETCH DATA
+  // LOAD DATA (localStorage → fallback naar events.json)
   // -----------------------------
-const fetchData = () => {
-  fetch("http://localhost:3000/events")
-    .then((res) => res.json())
-    .then((events) => {
-      setData({
-        events,
-        categories: [], // of haal categorieën ook uit JSON-server
-      });
-    });
-};
-
   useEffect(() => {
-    fetchData();
+    const saved = localStorage.getItem("eventsData");
+
+    if (saved) {
+      setData(JSON.parse(saved));
+    } else {
+      fetch("/events.json")
+        .then((res) => res.json())
+        .then((json) => {
+          setData(json);
+          localStorage.setItem("eventsData", JSON.stringify(json));
+        });
+    }
   }, []);
+
+  function updateData(newData) {
+    setData(newData);
+    localStorage.setItem("eventsData", JSON.stringify(newData));
+  }
 
   if (!data) return <p>Loading…</p>;
 
@@ -60,11 +65,13 @@ const fetchData = () => {
   // -----------------------------
   // DELETE EVENT
   // -----------------------------
-  async function handleDelete() {
-    await fetch(`http://localhost:3000/events/${event.id}`, {
-      method: "DELETE",
-    });
+  function handleDelete() {
+    const updated = {
+      ...data,
+      events: data.events.filter((e) => e.id !== event.id),
+    };
 
+    updateData(updated);
     setDeleteOpen(false);
     navigate("/events");
   }
@@ -72,20 +79,20 @@ const fetchData = () => {
   // -----------------------------
   // EDIT EVENT
   // -----------------------------
-  async function handleEditSubmit(values) {
-    await fetch(`http://localhost:3000/events/${event.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
+  function handleEditSubmit(values) {
+    const updated = {
+      ...data,
+      events: data.events.map((e) =>
+        e.id === event.id ? { ...e, ...values } : e
+      ),
+    };
 
+    updateData(updated);
     setEditOpen(false);
-    fetchData();
   }
 
   return (
     <>
-      {/* Achtergrond */}
       <Box
         p={6}
         position="fixed"
@@ -97,7 +104,6 @@ const fetchData = () => {
         zIndex="-1"
       />
 
-      {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
         <Card.Root maxW="600px" mx="auto" overflow="hidden" p={4}>
           <Image
@@ -158,7 +164,6 @@ const fetchData = () => {
         </Card.Root>
       </Box>
 
-      {/* EDIT MODAL */}
       <SimpleModal
         open={editOpen}
         onClose={() => setEditOpen(false)}
@@ -171,7 +176,6 @@ const fetchData = () => {
         />
       </SimpleModal>
 
-      {/* DELETE MODAL */}
       <SimpleModal
         open={deleteOpen}
         onClose={() => setDeleteOpen(false)}
@@ -194,4 +198,4 @@ const fetchData = () => {
       </SimpleModal>
     </>
   );
-};
+}

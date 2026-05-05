@@ -23,52 +23,55 @@ export const EventsPage = () => {
   const navigate = useNavigate();
 
   // -----------------------------
-  // FETCH DATA
+  // LOAD DATA (localStorage → fallback naar events.json)
   // -----------------------------
-  const fetchData = () => {
-    fetch("http://localhost:3000/events")
-      .then((res) => res.json())
-      .then((events) => {
-        fetch("events.json")
-          .then((res) => res.json())
-          .then((json) => {
-            setData({
-              ...json,
-              events: events, // combine JSON categories + live events
-            });
-          });
-      });
-  };
-
   useEffect(() => {
-    fetchData();
+    const saved = localStorage.getItem("eventsData");
+
+    if (saved) {
+      setData(JSON.parse(saved));
+    } else {
+      fetch("/events.json")
+        .then((res) => res.json())
+        .then((json) => {
+          setData(json);
+          localStorage.setItem("eventsData", JSON.stringify(json));
+        });
+    }
   }, []);
 
+  function updateData(newData) {
+    setData(newData);
+    localStorage.setItem("eventsData", JSON.stringify(newData));
+  }
+
   if (!data) return <p>Loading…</p>;
+
+  const eventsArray = data.events || [];
+  const categories = data.categories || [];
 
   // -----------------------------
   // ADD EVENT
   // -----------------------------
-  const addEvent = async (newEvent) => {
-    await fetch("http://localhost:3000/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: crypto.randomUUID(),
-        ...newEvent,
-        categoryIds: [], // als je later categorieën toevoegt
-      }),
-    });
+  const addEvent = (newEvent) => {
+    const updated = {
+      ...data,
+      events: [
+        ...data.events,
+        {
+          id: crypto.randomUUID(),
+          ...newEvent,
+          categoryIds: [],
+        },
+      ],
+    };
 
-    fetchData(); // lijst opnieuw ophalen
+    updateData(updated);
   };
 
   // -----------------------------
   // FILTER EVENTS
   // -----------------------------
-  const eventsArray = data.events || [];
-  const categories = data.categories || [];
-
   const filteredEvents = eventsArray.filter((evt) => {
     const search = searchTerm.toLowerCase();
 
@@ -90,7 +93,6 @@ export const EventsPage = () => {
   // -----------------------------
   return (
     <>
-      {/* HEADER MET ZOEK + CREATE */}
       <HeadingExample
         data={data}
         searchTerm={searchTerm}
@@ -98,7 +100,6 @@ export const EventsPage = () => {
         onCreate={() => setCreateOpen(true)}
       />
 
-      {/* MODAL */}
       <SimpleModal
         open={createOpen}
         onClose={() => setCreateOpen(false)}
@@ -113,7 +114,6 @@ export const EventsPage = () => {
         />
       </SimpleModal>
 
-      {/* Achtergrond */}
       <Box
         position="fixed"
         inset="0"
@@ -124,7 +124,6 @@ export const EventsPage = () => {
         zIndex="-1"
       />
 
-      {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
         <SimpleGrid columns={[1, 2, 3, 4]} spacing={6} gap="30px">
           {filteredEvents.map((evt) => (
