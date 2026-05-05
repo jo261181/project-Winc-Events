@@ -10,24 +10,37 @@ import {
   Card,
 } from "@chakra-ui/react";
 
-import HeadingExample from "../components/ui/Heading";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
 
-export const EventPage = () => {
+export default function EventPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
-
-  // MODAL STATES
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  useEffect(() => {
-    fetch("/events.json")
+  // -----------------------------
+  // FETCH DATA
+  // -----------------------------
+  const fetchData = () => {
+    fetch("http://localhost:3000/events")
       .then((res) => res.json())
-      .then((json) => setData(json));
+      .then((events) => {
+        fetch("/events.json")
+          .then((res) => res.json())
+          .then((json) => {
+            setData({
+              ...json,
+              events: events, // combine JSON categories + live events
+            });
+          });
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   if (!data) return <p>Loading…</p>;
@@ -41,16 +54,18 @@ export const EventPage = () => {
     return (
       <Box p={6}>
         <Text>Event not found</Text>
-        <Button mt={4} onClick={() => navigate(-1)}>
+        <Button mt={4} onClick={() => navigate("/events")}>
           Go back
         </Button>
       </Box>
     );
   }
 
+  // -----------------------------
   // DELETE EVENT
+  // -----------------------------
   async function handleDelete() {
-    await fetch(`/events/${event.id}`, {
+    await fetch(`http://localhost:3000/events/${event.id}`, {
       method: "DELETE",
     });
 
@@ -58,16 +73,18 @@ export const EventPage = () => {
     navigate("/events");
   }
 
+  // -----------------------------
   // EDIT EVENT
+  // -----------------------------
   async function handleEditSubmit(values) {
-    await fetch(`/events/${event.id}`, {
+    await fetch(`http://localhost:3000/events/${event.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
 
     setEditOpen(false);
-    navigate(0); // refresh
+    fetchData();
   }
 
   return (
@@ -140,7 +157,7 @@ export const EventPage = () => {
             <Button colorScheme="red" onClick={() => setDeleteOpen(true)}>
               Delete Event
             </Button>
-            <Button onClick={() => navigate(-1)}>← Back to events</Button>
+            <Button onClick={() => navigate("/events")}>← Back to events</Button>
           </Card.Footer>
         </Card.Root>
       </Box>

@@ -14,25 +14,61 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
-import { EventPage } from "./EventPage";
 
 export const EventsPage = () => {
   const [data, setData] = useState(null);
-  const [createOpen, setCreateOpen] = useState(false); // ← JUIST HIER
+  const [createOpen, setCreateOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch("events.json")
+  // -----------------------------
+  // FETCH DATA
+  // -----------------------------
+  const fetchData = () => {
+    fetch("http://localhost:3000/events")
       .then((res) => res.json())
-      .then((json) => setData(json));
+      .then((events) => {
+        fetch("events.json")
+          .then((res) => res.json())
+          .then((json) => {
+            setData({
+              ...json,
+              events: events, // combine JSON categories + live events
+            });
+          });
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   if (!data) return <p>Loading…</p>;
 
+  // -----------------------------
+  // ADD EVENT
+  // -----------------------------
+  const addEvent = async (newEvent) => {
+    await fetch("http://localhost:3000/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: crypto.randomUUID(),
+        ...newEvent,
+        categoryIds: [], // als je later categorieën toevoegt
+      }),
+    });
+
+    fetchData(); // lijst opnieuw ophalen
+  };
+
+  // -----------------------------
+  // FILTER EVENTS
+  // -----------------------------
   const eventsArray = data.events || [];
   const categories = data.categories || [];
+
   const filteredEvents = eventsArray.filter((evt) => {
     const search = searchTerm.toLowerCase();
 
@@ -49,6 +85,9 @@ export const EventsPage = () => {
     );
   });
 
+  // -----------------------------
+  // RENDER
+  // -----------------------------
   return (
     <>
       {/* HEADER MET ZOEK + CREATE */}
@@ -66,7 +105,10 @@ export const EventsPage = () => {
         title="Create new event"
       >
         <EventForm
-          onSubmit={() => setCreateOpen(false)}
+          onSubmit={(values) => {
+            addEvent(values);
+            setCreateOpen(false);
+          }}
           cancel={() => setCreateOpen(false)}
         />
       </SimpleModal>
@@ -84,7 +126,7 @@ export const EventsPage = () => {
 
       {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
-        <SimpleGrid columns={[1, 2, 3, 4, 4]} spacing={6} gap="30px">
+        <SimpleGrid columns={[1, 2, 3, 4]} spacing={6} gap="30px">
           {filteredEvents.map((evt) => (
             <Card.Root
               key={evt.id}
@@ -94,19 +136,11 @@ export const EventsPage = () => {
               alignItems="center"
               mb={5}
               cursor="pointer"
-              onClick={() => navigate(`/event/${evt.id}`)}
+              onClick={() => navigate(`/events/${evt.id}`)}
               boxShadow="md"
-              _dark={{
-                bg: "gray.800",
-                boxShadow: "0 0 0 1px rgba(255,255,255,0.06)",
-              }}
               _hover={{
                 transform: "scale(1.03)",
                 boxShadow: "lg",
-                _dark: {
-                  boxShadow: "0 0 0 1px",
-                  color: "white",
-                },
               }}
               transition="0.2s"
             >
@@ -159,7 +193,7 @@ export const EventsPage = () => {
               </Card.Body>
 
               <Card.Footer gap={3}>
-                <Button onClick={() => navigate(`/event/${evt.id}`)}>
+                <Button onClick={() => navigate(`/events/${evt.id}`)}>
                   View details
                 </Button>
               </Card.Footer>
