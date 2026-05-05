@@ -1,8 +1,13 @@
 import { Box, Input, Button, Flex, Stack, Heading } from "@chakra-ui/react";
 import { useState } from "react";
 
-export default function HeadingExample({ children, data, onCreate }) {
-  const [searchTerm, setSearchTerm] = useState("");
+export default function HeadingExample({
+  children,
+  data,
+  onCreate,
+  searchTerm,
+  setSearchTerm,
+}) {
   const handleCreate = () => setCreateOpen(true);
 
   const events = Array.isArray(data?.events) ? data.events : [];
@@ -17,7 +22,7 @@ export default function HeadingExample({ children, data, onCreate }) {
           const eventCategoryNames =
             event.categoryIds
               ?.map((id) =>
-                categories.find((c) => c.id === id)?.name?.toLowerCase()
+                categories.find((c) => c.id === id)?.name?.toLowerCase(),
               )
               .filter(Boolean) || [];
 

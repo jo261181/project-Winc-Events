@@ -14,10 +14,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
+import { EventPage } from "./EventPage";
 
 export const EventsPage = () => {
   const [data, setData] = useState(null);
-  const [createOpen, setCreateOpen] = useState(false);   // ← JUIST HIER
+  const [createOpen, setCreateOpen] = useState(false); // ← JUIST HIER
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
@@ -32,7 +33,6 @@ export const EventsPage = () => {
 
   const eventsArray = data.events || [];
   const categories = data.categories || [];
-
   const filteredEvents = eventsArray.filter((evt) => {
     const search = searchTerm.toLowerCase();
 
@@ -54,7 +54,9 @@ export const EventsPage = () => {
       {/* HEADER MET ZOEK + CREATE */}
       <HeadingExample
         data={data}
-        onCreate={() => setCreateOpen(true)}   // ← BELANGRIJK
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        onCreate={() => setCreateOpen(true)}
       />
 
       {/* MODAL */}
@@ -82,7 +84,7 @@ export const EventsPage = () => {
 
       {/* Content */}
       <Box position="relative" zIndex="1" p={6}>
-        <SimpleGrid columns={[1, 2, null, 3]} spacing={6} gap="30px">
+        <SimpleGrid columns={[1, 2, 3, 4]} spacing={6} gap="30px">
           {filteredEvents.map((evt) => (
             <Card.Root
               key={evt.id}
@@ -113,7 +115,7 @@ export const EventsPage = () => {
                   src={evt.image}
                   alt={evt.title}
                   w="100%"
-                  h={{ base: "200px", md: "300px", lg: "400px" }}
+                  h={{ base: "50px", md: "100px", lg: "150px" }}
                   objectFit="cover"
                   borderRadius="md"
                   mb={4}
