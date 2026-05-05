@@ -5,7 +5,7 @@ import { EventsPage } from './pages/EventsPage';
 import { Provider } from './components/ui/provider';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './components/Root';
-import App from './App.jsx';
+
 
 const router = createBrowserRouter([
     {

@@ -24,20 +24,16 @@ export default function EventPage() {
   // -----------------------------
   // FETCH DATA
   // -----------------------------
-  const fetchData = () => {
-    fetch("http://localhost:3000/events")
-      .then((res) => res.json())
-      .then((events) => {
-        fetch("/events.json")
-          .then((res) => res.json())
-          .then((json) => {
-            setData({
-              ...json,
-              events: events, // combine JSON categories + live events
-            });
-          });
+const fetchData = () => {
+  fetch("http://localhost:3000/events")
+    .then((res) => res.json())
+    .then((events) => {
+      setData({
+        events,
+        categories: [], // of haal categorieën ook uit JSON-server
       });
-  };
+    });
+};
 
   useEffect(() => {
     fetchData();
