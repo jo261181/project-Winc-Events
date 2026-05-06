@@ -10,28 +10,17 @@ import {
 } from "@chakra-ui/react";
 
 import HeadingExample from "../components/ui/Heading";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
 
 export const EventsPage = () => {
-  const [data, setData] = useState(null);
+  const { data, setData } = useOutletContext();
   const [createOpen, setCreateOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
-
-  // -----------------------------
-  // ALWAYS LOAD FROM events.json
-  // -----------------------------
-  useEffect(() => {
-    fetch("/events.json")
-      .then((res) => res.json())
-      .then((json) => setData(json));
-  }, []);
-
-  if (!data) return <p>Loading…</p>;
 
   const eventsArray = data.events || [];
   const categories = data.categories || [];
@@ -74,9 +63,6 @@ export const EventsPage = () => {
     );
   });
 
-  // -----------------------------
-  // RENDER
-  // -----------------------------
   return (
     <>
       <HeadingExample

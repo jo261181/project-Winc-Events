@@ -1,5 +1,5 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
+import { useState } from "react";
 import {
   Box,
   Text,
@@ -16,21 +16,10 @@ import EventForm from "../components/ui/EventForm";
 export default function EventPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { data, setData } = useOutletContext();
 
-  const [data, setData] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-
-  // -----------------------------
-  // ALWAYS LOAD FROM events.json
-  // -----------------------------
-  useEffect(() => {
-    fetch("/events.json")
-      .then((res) => res.json())
-      .then((json) => setData(json));
-  }, []);
-
-  if (!data) return <p>Loading…</p>;
 
   const events = data.events || [];
   const categories = data.categories || [];
