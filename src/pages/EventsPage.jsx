@@ -23,21 +23,13 @@ export const EventsPage = () => {
   const navigate = useNavigate();
 
   // -----------------------------
-  // LOAD DATA (localStorage → fallback naar events.json)
+  // ALWAYS LOAD FROM events.json
   // -----------------------------
-useEffect(() => {
-  fetch("/events.json")
-    .then((res) => res.json())
-    .then((json) => {
-      setData(json);
-      localStorage.setItem("eventsData", JSON.stringify(json));
-    });
-}, []);
-
-  function updateData(newData) {
-    setData(newData);
-    localStorage.setItem("eventsData", JSON.stringify(newData));
-  }
+  useEffect(() => {
+    fetch("/events.json")
+      .then((res) => res.json())
+      .then((json) => setData(json));
+  }, []);
 
   if (!data) return <p>Loading…</p>;
 
@@ -45,7 +37,7 @@ useEffect(() => {
   const categories = data.categories || [];
 
   // -----------------------------
-  // ADD EVENT
+  // ADD EVENT (in-memory only)
   // -----------------------------
   const addEvent = (newEvent) => {
     const updated = {
@@ -60,7 +52,7 @@ useEffect(() => {
       ],
     };
 
-    updateData(updated);
+    setData(updated);
   };
 
   // -----------------------------

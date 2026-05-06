@@ -22,21 +22,13 @@ export default function EventPage() {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   // -----------------------------
-  // LOAD DATA (localStorage → fallback naar events.json)
+  // ALWAYS LOAD FROM events.json
   // -----------------------------
-useEffect(() => {
-  fetch("/events.json")
-    .then((res) => res.json())
-    .then((json) => {
-      setData(json);
-      localStorage.setItem("eventsData", JSON.stringify(json));
-    });
-}, []);
-
-  function updateData(newData) {
-    setData(newData);
-    localStorage.setItem("eventsData", JSON.stringify(newData));
-  }
+  useEffect(() => {
+    fetch("/events.json")
+      .then((res) => res.json())
+      .then((json) => setData(json));
+  }, []);
 
   if (!data) return <p>Loading…</p>;
 
@@ -57,7 +49,7 @@ useEffect(() => {
   }
 
   // -----------------------------
-  // DELETE EVENT
+  // DELETE EVENT (in-memory only)
   // -----------------------------
   function handleDelete() {
     const updated = {
@@ -65,13 +57,13 @@ useEffect(() => {
       events: data.events.filter((e) => e.id !== event.id),
     };
 
-    updateData(updated);
+    setData(updated);
     setDeleteOpen(false);
     navigate("/events");
   }
 
   // -----------------------------
-  // EDIT EVENT
+  // EDIT EVENT (in-memory only)
   // -----------------------------
   function handleEditSubmit(values) {
     const updated = {
@@ -81,7 +73,7 @@ useEffect(() => {
       ),
     };
 
-    updateData(updated);
+    setData(updated);
     setEditOpen(false);
   }
 
