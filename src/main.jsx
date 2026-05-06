@@ -8,20 +8,20 @@ import { Root } from "./components/Root";
 
 const router = createBrowserRouter([
   {
-    path: "/",          // root layout
+    path: "/",
     element: <Root />,
     children: [
       {
-        path: "events",     // lijstpagina
+        index: true,            // / → EventsPage
         element: <EventsPage />,
       },
       {
-        path: "events/:id", // detailpagina
+        path: "events",         // /events → EventsPage
+        element: <EventsPage />,
+      },
+      {
+        path: "events/:id",     // /events/123 → EventPage
         element: <EventPage />,
-      },
-      {
-        index: true,        // als iemand / bezoekt → redirect naar /events
-        element: <EventsPage />,
       },
     ],
   },
