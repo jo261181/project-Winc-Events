@@ -3,6 +3,8 @@ import { Navigation } from "./Navigation";
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
+import { Toaster } from "@chakra-ui/react";
+
 export const Root = () => {
   const [data, setData] = useState(null);
 
@@ -16,8 +18,10 @@ export const Root = () => {
 
   return (
     <Box>
+      <Toaster />   
       <Navigation />
       <Outlet context={{ data, setData }} />
     </Box>
   );
 };
+
