@@ -9,6 +9,7 @@ import {
   HStack,
   Card,
 } from "@chakra-ui/react";
+import { Toaster, toaster } from "@/components/ui/toaster"
 
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
@@ -36,6 +37,11 @@ export default function EventPage() {
       </Box>
     );
   }
+
+  toaster.create({
+  title: "Toast Title",
+  description: "Toast Description",
+})
 
   // -----------------------------
   // DELETE EVENT (in-memory only)
@@ -134,6 +140,7 @@ export default function EventPage() {
             <Button colorScheme="red" onClick={() => setDeleteOpen(true)}>
               Delete Event
             </Button>
+            <Toaster />
             <Button onClick={() => navigate("/events")}>← Back to events</Button>
           </Card.Footer>
         </Card.Root>
@@ -161,6 +168,7 @@ export default function EventPage() {
         <Button colorScheme="red" width="full" onClick={handleDelete}>
           Yes, delete
         </Button>
+        <Toaster />
 
         <Button
           variant="ghost"
