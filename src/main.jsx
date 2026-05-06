@@ -12,19 +12,16 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       {
-        path: "/",
+        index: true,          // homepage = /events
         element: <EventsPage />,
-        // loader: postListLoader,
       },
       {
-        path: "/events/:id",
+        path: "events",       // zelfde pagina, maar expliciet bereikbaar via /events
+        element: <EventsPage />,
+      },
+      {
+        path: "events/:id",   // detailpagina
         element: <EventPage />,
-        // loader: postLoader,
-        // action: addComment,
-      },
-      {
-        path: "/events",
-        element: <EventsPage />,
       },
     ],
   },
@@ -35,5 +32,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
