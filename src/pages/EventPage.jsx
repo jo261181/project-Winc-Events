@@ -1,7 +1,6 @@
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { useToast } from "@chakra-ui/toast";
-
 import {
   Box,
   Text,
@@ -13,8 +12,6 @@ import {
 } from "@chakra-ui/react";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
-
-
 
 export default function EventPage() {
   const { id } = useParams();
@@ -51,12 +48,12 @@ export default function EventPage() {
     setDeleteOpen(false);
     navigate("/events");
 
-toast({
-  title: "Event verwijderd",
-  description: `"${event.title}" is succesvol verwijderd.`,
-  status: "success",
-});
-
+    toast({
+      title: "Event verwijderd",
+      description: `"${event.title}" is succesvol verwijderd.`,
+      status: "success",
+    });
+  }
 
   function handleEditSubmit(values) {
     const updated = {
@@ -70,11 +67,10 @@ toast({
     setEditOpen(false);
 
     toast({
-  title: "Event aangepast",
-  description: `"${values.title}" is succesvol aangepast.`,
-  status: "success",
-});
-
+      title: "Event aangepast",
+      description: `"${values.title}" is succesvol aangepast.`,
+      status: "success",
+    });
   }
 
   return (
@@ -82,5 +78,4 @@ toast({
       {/* jouw UI blijft hetzelfde */}
     </>
   );
-}
 }

@@ -7,16 +7,14 @@ import {
   Text,
   Card,
   SimpleGrid,
-  useToast,
 } from "@chakra-ui/react";
 
+import { useToast } from "@chakra-ui/toast";
 import HeadingExample from "../components/ui/Heading";
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
-import { useToast } from "@chakra-ui/toast";
-
 
 export const EventsPage = () => {
   const { data, setData } = useOutletContext();
@@ -24,15 +22,11 @@ export const EventsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
- const toast = useToast();
-
+  const toast = useToast();
 
   const eventsArray = data.events || [];
   const categories = data.categories || [];
 
-  // -----------------------------
-  // ADD EVENT (in-memory only)
-  // -----------------------------
   const addEvent = (newEvent) => {
     const updated = {
       ...data,
@@ -52,14 +46,9 @@ export const EventsPage = () => {
       title: "Event toegevoegd",
       description: `"${newEvent.title}" is succesvol aangemaakt.`,
       status: "success",
-      duration: 3000,
-      isClosable: true,
     });
   };
 
-  // -----------------------------
-  // FILTER EVENTS
-  // -----------------------------
   const filteredEvents = eventsArray.filter((evt) => {
     const search = searchTerm.toLowerCase();
 
