@@ -1,6 +1,7 @@
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
-import { createToaster } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/toast";
+
 import {
   Box,
   Text,
@@ -13,12 +14,13 @@ import {
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
 
-const toaster = createToaster();
+
 
 export default function EventPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, setData } = useOutletContext();
+  const toast = useToast();
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -49,12 +51,12 @@ export default function EventPage() {
     setDeleteOpen(false);
     navigate("/events");
 
-    toaster.create({
-      title: "Event verwijderd",
-      description: `"${event.title}" is succesvol verwijderd.`,
-      type: "success",
-    });
-  }
+toast({
+  title: "Event verwijderd",
+  description: `"${event.title}" is succesvol verwijderd.`,
+  status: "success",
+});
+
 
   function handleEditSubmit(values) {
     const updated = {
@@ -67,11 +69,12 @@ export default function EventPage() {
     setData(updated);
     setEditOpen(false);
 
-    toaster.create({
-      title: "Event aangepast",
-      description: `"${values.title}" is succesvol aangepast.`,
-      type: "success",
-    });
+    toast({
+  title: "Event aangepast",
+  description: `"${values.title}" is succesvol aangepast.`,
+  status: "success",
+});
+
   }
 
   return (
@@ -79,4 +82,5 @@ export default function EventPage() {
       {/* jouw UI blijft hetzelfde */}
     </>
   );
+}
 }

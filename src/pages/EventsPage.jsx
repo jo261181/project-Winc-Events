@@ -15,6 +15,8 @@ import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
+import { useToast } from "@chakra-ui/toast";
+
 
 export const EventsPage = () => {
   const { data, setData } = useOutletContext();
@@ -22,7 +24,8 @@ export const EventsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
-  const toast = useToast();
+ const toast = useToast();
+
 
   const eventsArray = data.events || [];
   const categories = data.categories || [];
