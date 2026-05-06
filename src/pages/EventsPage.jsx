@@ -7,6 +7,7 @@ import {
   Text,
   Card,
   SimpleGrid,
+  useToast,
 } from "@chakra-ui/react";
 
 import HeadingExample from "../components/ui/Heading";
@@ -21,6 +22,7 @@ export const EventsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
+  const toast = useToast();
 
   const eventsArray = data.events || [];
   const categories = data.categories || [];
@@ -42,6 +44,14 @@ export const EventsPage = () => {
     };
 
     setData(updated);
+
+    toast({
+      title: "Event toegevoegd",
+      description: `"${newEvent.title}" is succesvol aangemaakt.`,
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   // -----------------------------

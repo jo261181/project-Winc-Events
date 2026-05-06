@@ -1,5 +1,6 @@
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { useToast } from "@chakra-ui/react";
 import {
   Box,
   Text,
@@ -9,8 +10,6 @@ import {
   HStack,
   Card,
 } from "@chakra-ui/react";
-import { Toaster, toaster } from "@/components/ui/toaster"
-
 import SimpleModal from "../components/ui/modal";
 import EventForm from "../components/ui/EventForm";
 
@@ -18,6 +17,7 @@ export default function EventPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, setData } = useOutletContext();
+  const toast = useToast();
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -38,13 +38,8 @@ export default function EventPage() {
     );
   }
 
-  toaster.create({
-  title: "Toast Title",
-  description: "Toast Description",
-})
-
   // -----------------------------
-  // DELETE EVENT (in-memory only)
+  // DELETE EVENT
   // -----------------------------
   function handleDelete() {
     const updated = {
@@ -55,10 +50,18 @@ export default function EventPage() {
     setData(updated);
     setDeleteOpen(false);
     navigate("/events");
+
+    toast({
+      title: "Event verwijderd",
+      description: `"${event.title}" is succesvol verwijderd.`,
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   }
 
   // -----------------------------
-  // EDIT EVENT (in-memory only)
+  // EDIT EVENT
   // -----------------------------
   function handleEditSubmit(values) {
     const updated = {
@@ -70,7 +73,15 @@ export default function EventPage() {
 
     setData(updated);
     setEditOpen(false);
-  }
+
+    toast({
+      title: "Event aangepast",
+      description: `"${values.title}" is succesvol aangepast.`,
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  } // ← DEZE MISSTE BIJ JOU
 
   return (
     <>
@@ -140,7 +151,6 @@ export default function EventPage() {
             <Button colorScheme="red" onClick={() => setDeleteOpen(true)}>
               Delete Event
             </Button>
-            <Toaster />
             <Button onClick={() => navigate("/events")}>← Back to events</Button>
           </Card.Footer>
         </Card.Root>
@@ -168,7 +178,6 @@ export default function EventPage() {
         <Button colorScheme="red" width="full" onClick={handleDelete}>
           Yes, delete
         </Button>
-        <Toaster />
 
         <Button
           variant="ghost"

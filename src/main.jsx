@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import EventPage from "./pages/EventPage";
 import { EventsPage } from "./pages/EventsPage";
-import { Provider } from "./components/ui/provider";
+import { ChakraProvider } from "@chakra-ui/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Root } from "./components/Root";
 
@@ -12,15 +12,15 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       {
-        index: true,            // / → EventsPage
+        index: true, // / → EventsPage
         element: <EventsPage />,
       },
       {
-        path: "events",         // /events → EventsPage
+        path: "events", // /events → EventsPage
         element: <EventsPage />,
       },
       {
-        path: "events/:id",     // /events/123 → EventPage
+        path: "events/:id", // /events/123 → EventPage
         element: <EventPage />,
       },
     ],
@@ -29,8 +29,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider>
+    <ChakraProvider>
       <RouterProvider router={router} />
-    </Provider>
+    </ChakraProvider>
   </React.StrictMode>
 );
