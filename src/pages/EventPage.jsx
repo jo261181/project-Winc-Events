@@ -24,20 +24,14 @@ export default function EventPage() {
   // -----------------------------
   // LOAD DATA (localStorage → fallback naar events.json)
   // -----------------------------
-  useEffect(() => {
-    const saved = localStorage.getItem("eventsData");
-
-    if (saved) {
-      setData(JSON.parse(saved));
-    } else {
-      fetch("/events.json")
-        .then((res) => res.json())
-        .then((json) => {
-          setData(json);
-          localStorage.setItem("eventsData", JSON.stringify(json));
-        });
-    }
-  }, []);
+useEffect(() => {
+  fetch("/events.json")
+    .then((res) => res.json())
+    .then((json) => {
+      setData(json);
+      localStorage.setItem("eventsData", JSON.stringify(json));
+    });
+}, []);
 
   function updateData(newData) {
     setData(newData);
